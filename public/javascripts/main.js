@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById('buttonSortPrice').addEventListener("click", function () {
                console.log(clientShoeArray.sort(sortFunction));
-               createList();
+               createSortList();
               
              
                
@@ -122,6 +122,51 @@ function createList() {
       });
    });
 });
+};
+
+function createSortList() {
+   // clear prior data
+   //go get data
+   // $.get("/getAllShoes", function(data, status){  // AJAX get
+     
+   //       clientShoeArray = data;  // put the returned server json data into our local  array
+         
+         var divMovieList = document.getElementById("divMovieList");
+         while (divMovieList.firstChild) {    // remove any old data so don't get duplicates
+             divMovieList.removeChild(divMovieList.firstChild);
+         };
+      
+         var ul = document.createElement('ul');
+        
+         //creating li's, giving them ID's via setAttribute
+         clientShoeArray.forEach(function (element) {   
+            var li = document.createElement('li');
+            li.classList.add('oneMovie'); 
+            li.setAttribute("data-parm", element.ID);
+            li.innerHTML = "Name: " + element.shoeName + " | Year:  " + element.year + " | Price: " + element.price;
+            ul.appendChild(li);
+         });
+
+
+         divMovieList.appendChild(ul);
+
+         //this is creating active li's.
+        
+         var liArray = document.getElementsByClassName("oneMovie");
+         Array.from(liArray).forEach(function (element) {
+            element.addEventListener('click', function () {
+               // get that data-parm we added for THIS particular li as we loop thru them
+               var parm = this.getAttribute("data-parm");  // passing in the record.Id
+               // get our encoded value and save THIS ID value in the localStorage "dictionairy"
+               localStorage.setItem('parm', parm);
+               let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
+               localStorage.setItem('clientShoeArray', stringShoeArray);
+               document.location.href = "index.html#details";
+
+        
+      });
+   });
+
 };
 
 function GetArrayPointer(localID) {
