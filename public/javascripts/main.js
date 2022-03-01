@@ -52,13 +52,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
             $(document).on("pagebeforeshow", "#list", function (event) {   // have to use jQuery 
                createList();
+               console.log(clientShoeArray);
             });
 
             document.getElementById('buttonSortPrice').addEventListener("click", function () {
                console.log(clientShoeArray.sort(sortFunction));
                createList();
-              // document.location.href = "index.html#list";
-              location.reload();
+              
+             
                
             });
 
