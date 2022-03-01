@@ -37,18 +37,12 @@ document.addEventListener("DOMContentLoaded", function () {
                   contentType: "application/json; charset=utf-8",
                   dataType   : "json",
                   success: function (result) {
-                  console.log(result);
-                  
-                 
-               
+                  console.log(result);               
                   }
                });
              } 
-            
              document.location.href = "index.html#list";     
-             console.log(clientShoeArray);
          });
-            
 
             $(document).on("pagebeforeshow", "#list", function (event) {   // have to use jQuery 
                createList();
@@ -57,10 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById('buttonSortPrice').addEventListener("click", function () {
                console.log(clientShoeArray.sort(sortFunction));
-               createSortList();
-              
-             
-               
+               createSortList();   
             });
 
             $(document).on("pagebeforeshow", "#details", function (event) {   // have to use jQuery 
@@ -123,10 +114,10 @@ function createList() {
    });
 });
 };
-
+// If I leave AJAX get call code, the array will always be in the same order that is hard-coded in the server
+//and not be the new array I want by sorting.
 function createSortList() {
-   // clear prior data
-   //go get data
+  
    // $.get("/getAllShoes", function(data, status){  // AJAX get
      
    //       clientShoeArray = data;  // put the returned server json data into our local  array
@@ -161,12 +152,9 @@ function createSortList() {
                localStorage.setItem('parm', parm);
                let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
                localStorage.setItem('clientShoeArray', stringShoeArray);
-               document.location.href = "index.html#details";
-
-        
+               document.location.href = "index.html#details";        
       });
    });
-
 };
 
 function GetArrayPointer(localID) {
@@ -181,22 +169,6 @@ function sortFunction(a,b) {
    return a.price - b.price;
 }
 
-// function dynamicSort(property) {
-//    var sortOrder = 1;
-
-//    if (property[0] === "-") {
-//        sortOrder = -1;
-//        property = property.substr(1);
-//    }
-
-//    return function (a, b) {
-//        if (sortOrder == -1) {
-//            return b[property].localeCompare(a[property]);
-//        } else {
-//            return a[property].localeCompare(b[property]);
-//        }
-//    }
-// }
 
 
 
