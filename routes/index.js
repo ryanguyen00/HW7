@@ -17,7 +17,7 @@ serverShoeArray.push(new shoeObject("xTrue Blue 3's", 2019, 220, "url"));
 serverShoeArray.push(new shoeObject("xBred 11s", 2013, 180, "url"));
 serverShoeArray.push(new shoeObject("xFire Red 4's", 2012, 300, "url"));
 
-console.log(serverShoeArray);
+
 
 //if client comes to server with a "/", just send back index.html file back
 
