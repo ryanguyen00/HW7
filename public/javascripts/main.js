@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('buttonSortTitle').addEventListener("click", function(){
                clientShoeArray.sort(shoeNameSort);
                createSortList();
-               document.getElementById("updated").innerHTML = "New List Updated by title!";
+               document.getElementById("updated").innerHTML = "New List Updated by Alphabetical Order!";
             });
             
             //sort by Year
