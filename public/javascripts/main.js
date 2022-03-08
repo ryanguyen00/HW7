@@ -40,31 +40,52 @@ document.addEventListener("DOMContentLoaded", function () {
                   console.log(result);               
                   }
                });
+               document.location.href = "index.html#list";     
              } 
-             document.location.href = "index.html#list";     
+           
          });
+
 
             $(document).on("pagebeforeshow", "#list", function (event) {   // have to use jQuery 
                createList();
                console.log(clientShoeArray);
             });
 
+            //sort by Price
             document.getElementById('buttonSortPrice').addEventListener("click", function () {
-               console.log(clientShoeArray.sort(sortFunction));
+               clientShoeArray.sort(function(a,b){
+                  return a.price - b.price;
+               });
                createSortList();   
+               document.getElementById("updated").innerHTML = "New List Updated by Price!";
             });
 
-            $(document).on("pagebeforeshow", "#details", function (event) {   // have to use jQuery 
-               let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
-               clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
-               let arrayPointer = GetArrayPointer(localID);
-               document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
-               document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
-               document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
+            //sort by Title
+            document.getElementById('buttonSortTitle').addEventListener("click", function(){
+               clientShoeArray.sort(shoeNameSort);
+               createSortList();
+               document.getElementById("updated").innerHTML = "New List Updated by title!";
+            });
+            
+            //sort by Year
+            document.getElementById('buttonSortYear').addEventListener("click", function(){
+               clientShoeArray.sort(yearSort);
+               createSortList();
+               document.getElementById("updated").innerHTML = "New List Updated by Year!";
+            });
+
+            // $(document).on("pagebeforeshow", "#details", function (event) {   // have to use jQuery 
+            //    let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+            //    clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
+            //    let arrayPointer = GetArrayPointer(localID);
+            //    document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
+            //    document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
+            //    document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
+            //    document.getElementById("oneURL").innerHTML = "URL: " + clientShoeArray[arrayPointer].url;
             
               
 
-            });
+            // });
 
 
 });
@@ -74,7 +95,7 @@ function createList() {
    // clear prior data
    //go get data
    $.get("/getAllShoes", function(data, status){  // AJAX get
-     
+            console.log(clientShoeArray);
          clientShoeArray = data;  // put the returned server json data into our local  array
          
          var divMovieList = document.getElementById("divMovieList");
@@ -93,7 +114,7 @@ function createList() {
             ul.appendChild(li);
          });
 
-
+         
          divMovieList.appendChild(ul);
 
          //this is creating active li's.
@@ -101,13 +122,18 @@ function createList() {
          var liArray = document.getElementsByClassName("oneMovie");
          Array.from(liArray).forEach(function (element) {
             element.addEventListener('click', function () {
+              
+
+              
                // get that data-parm we added for THIS particular li as we loop thru them
                var parm = this.getAttribute("data-parm");  // passing in the record.Id
                // get our encoded value and save THIS ID value in the localStorage "dictionairy"
                localStorage.setItem('parm', parm);
                let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
                localStorage.setItem('clientShoeArray', stringShoeArray);
-               document.location.href = "index.html#details";
+               let arrayPointer = GetArrayPointer(parm);
+               window.open(clientShoeArray[arrayPointer].url);
+               
 
         
       });
@@ -152,7 +178,9 @@ function createSortList() {
                localStorage.setItem('parm', parm);
                let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
                localStorage.setItem('clientShoeArray', stringShoeArray);
-               document.location.href = "index.html#details";        
+               let arrayPointer = GetArrayPointer(parm);
+               window.open(clientShoeArray[arrayPointer].url);
+                     
       });
    });
 };
@@ -165,9 +193,18 @@ function GetArrayPointer(localID) {
    }
 }
 
-function sortFunction(a,b) {
-   return a.price - b.price;
+
+
+function yearSort(a,b) {
+   return a.year - b.year;
 }
+
+function shoeNameSort(a,b) {
+   if (a.shoeName.toLowerCase() < b.shoeName.toLowerCase()) return -1;
+   if (a.shoeName.toLowerCase() > b.shoeName.toLowerCase()) return 1;
+   return 0;
+}
+
 
 
 
