@@ -32,14 +32,13 @@ fileManager  = {
         serverShoeArray.push(new shoeObject("True Blue 3's", 2019, 220, "https://www.google.com/search?q=true+blue+3s&source=lnms&tbm=isch&sa=X&ved=2ahUKEwj90PSMgKj2AhVcFTQIHWYjBvUQ_AUoAXoECAEQAw#imgrc=d1Q6F6OytsNZMM"));
         serverShoeArray.push(new shoeObject("Bred 11s", 2013, 180, "https://www.google.com/search?q=bred+11s&tbm=isch&ved=2ahUKEwiut66ogKj2AhUGBjQIHTh-AtIQ2-cCegQIABAA&oq=bred+11s&gs_lcp=CgNpbWcQAzIICAAQgAQQsQMyBQgAEIAEMgQIABBDMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDoGCAAQBxAeOgsIABCABBCxAxCDAToICAAQsQMQgwE6BAgAEAM6BwgAELEDEENQtAdYxBZgyBdoAHAAeACAAUCIAY0EkgECMTCYAQCgAQGqAQtnd3Mtd2l6LWltZ7ABAMABAQ&sclient=img&ei=HbAfYu60FIaM0PEPuPyJkA0#imgrc=YzcTLXkkRIhMtM"));
         serverShoeArray.push(new shoeObject("Fire Red 4's", 2012, 300, "https://www.google.com/search?q=fire+red+4%27s&tbm=isch&ved=2ahUKEwjk5NWPgKj2AhVgIjQIHRpDC3wQ2-cCegQIABAA&oq=fire+red+4%27s&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEMgUIABCABDIECAAQHjIECAAQHjIECAAQHjIECAAQHjIECAAQHjIECAAQHjIECAAQHjoECAAQQzoICAAQgAQQsQM6BwgAELEDEEM6CggAELEDEIMBEENQ0AVYkhNg9hNoAHAAeACAAUKIAYcFkgECMTOYAQCgAQGqAQtnd3Mtd2l6LWltZ8ABAQ&sclient=img&ei=6a8fYqTMIeDE0PEPmoat4Ac#imgrc=j0hJRVGLefHvdM"));
-
         fileManager.write();
       }
-},
-    write: function() {
+        },
+  write: function() {
   let data = JSON.stringify(serverShoeArray);    // take our object data and make it writeable
   fs.writeFileSync('shoesData.json', data);  // write it
-},
+  }
 }
 
 
@@ -69,6 +68,38 @@ router.post('/AddShoe', function(req, res) {
     success : 'Updated Successfully'
   }
   res.end(JSON.stringify(response)); // send reply
+});
+
+//Delete data
+router.delete('/DeleteShoe/:shoe', (req, res) => {
+  const shoe = req.params.shoe;
+  let found = false;
+  console.log(shoe + " from indeex.js");    
+
+  for(var i = 0; i < serverShoeArray.length; i++) // find the match
+  {
+    if(serverShoeArray[i].shoeName === shoe){
+      serverShoeArray.splice(i,1);  // remove object from array
+
+    //********************** */
+    // need to write updated data to persisted disk file
+
+    fileManager.write();
+
+    //**************************************** */
+    found = true;
+    break;
+}
+}
+
+ if (!found) {
+   console.log("Could not delete " + shoe);
+   return res.status(500).json({
+     status: "error"
+ });
+ } else {
+ res.send('Succesfully deleted ' + shoe +  ". Redirecting back to shoe show page");
+ }
 });
 
 module.exports = router;

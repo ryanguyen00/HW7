@@ -26,6 +26,7 @@
                 <ul>
                     <li><a href="#add" > Add Shoes</a></li>
                     <li><a href="#list" >Show My Shoes</a></li>
+                    <li> <a href="#delete">Delete My Shoes</a></li>
                 </ul>
                 
             </div>
@@ -58,6 +59,7 @@
         <ul>
             <li><a href="#home">Home</a></li>
             <li> <a href="#list">Show My Shoes</a></li>
+            <li> <a href="#delete">Delete My Shoes</a></li>
         </ul>
        
         
@@ -103,6 +105,7 @@
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li> <a href="#add">Add Shoes</a></li>
+                <li> <a href="#delete">Delete My Shoes</a></li>
             </ul>
         </div>
         <img src="images/shoe.jpg" alt="pic of shoe">
@@ -128,18 +131,19 @@
             <p>Made for educational purposes</p> 
     </div>
 </div>
-<!-- End of List Page -->
+<!-- End of List Page 
 
 
-<!-- Start of Active Li's -->
+Start of Active Li's -->
 
-<div data-role="page" id="details">
+ <div data-role="page" id="details">
     <div data-role="header" data-theme="a">
         <h1> A List of Your Shoes </h1>
         <div data-role="navbar"  data-theme="a">
             <ul>
-                <li><a href="#home"></a>>Home</a></li>
+                <li><a href="#home">Home</a></li>
                 <li> <a href="#add">Add Shoes</a></li>
+                <li> <a href="#delete">Delete My Shoes</a></li>
             </ul>
         </div>
         <img src="images/shoe.jpg" alt="pic of shoe">
@@ -148,20 +152,49 @@
     
 
     <div data-role="content">
-        <div id= "tester">
+        <div id="inputText">
 
         </div>
-        <p> Here are your details!</p>
-        <p id="oneShoeName"></p>
-        <p id="oneYear"></p>
-        <p id="onePrice"></p>
-        <p id="oneURL"></p> 
+        <input type="button" value="Delete Shoe" id="deleteShoe" data-inline="true" />
     </div>
 
 
 
     <div data-role="footer" id="test2">
             <p>Made for educational purposes</p> 
+    </div>
+</div>
+
+
+<!-- Start of Delete Page -->
+<div data-role="page" id="delete">
+    <div data-role="header" data-theme="a">
+        <h1> Delete Existing Shoes Here! </h1>
+        
+    <div data-role="navbar"  data-theme="a">
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li> <a href="#list">Show My Shoes</a></li>
+            <li> <a href="#add">Add Shoes</a></li>
+        </ul>
+       
+        
+    </div>
+        <img src="images/shoe.jpg" alt="pic of shoe">
+    </div>
+
+
+    <div data-role="content">
+       <h2>Want to delete an existing shoe? Click on desired shoe!</h2>    
+       <div id="deleteMovieList">
+        <ul id="deleteul"></ul>
+      </div>
+    </div>
+
+
+
+    <div data-role="footer" id="test">
+        <p>Made for educational purposes</p>
     </div>
 </div>
 

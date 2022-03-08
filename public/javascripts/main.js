@@ -45,9 +45,22 @@ document.addEventListener("DOMContentLoaded", function () {
            
          });
 
+         document.getElementById("buttonClear").addEventListener("click", function () {
+      
+            document.getElementById("shoeName").value = "";
+            document.getElementById("year").value = 2022;
+            document.getElementById("price").value = "";
+            document.getElementById("URL").value = "";
+        });
 
+            //load list before click
             $(document).on("pagebeforeshow", "#list", function (event) {   // have to use jQuery 
                createList();
+               console.log(clientShoeArray);
+            });
+            //load list before click
+            $(document).on("pagebeforeshow", "#delete", function (event) {   // have to use jQuery 
+               deleteList();
                console.log(clientShoeArray);
             });
 
@@ -57,35 +70,62 @@ document.addEventListener("DOMContentLoaded", function () {
                   return a.price - b.price;
                });
                createSortList();   
-               document.getElementById("updated").innerHTML = "New List Updated by Price!";
+              alert( "New List Updated by Price!")
             });
 
             //sort by Title
             document.getElementById('buttonSortTitle').addEventListener("click", function(){
                clientShoeArray.sort(shoeNameSort);
                createSortList();
-               document.getElementById("updated").innerHTML = "New List Updated by Alphabetical Order!";
+               alert(  "New List Updated by Alphabetical Order!")
+              
             });
             
             //sort by Year
             document.getElementById('buttonSortYear').addEventListener("click", function(){
                clientShoeArray.sort(yearSort);
                createSortList();
-               document.getElementById("updated").innerHTML = "New List Updated by Year!";
+               alert("New List Updated by Year!") 
             });
 
-            // $(document).on("pagebeforeshow", "#details", function (event) {   // have to use jQuery 
-            //    let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
-            //    clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
-            //    let arrayPointer = GetArrayPointer(localID);
-            //    document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
-            //    document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
-            //    document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
-            //    document.getElementById("oneURL").innerHTML = "URL: " + clientShoeArray[arrayPointer].url;
             
+
+            //active Li page to delete shoe.
+
+            $(document).on("pagebeforeshow", "#details", function (event) {   // have to use jQuery 
+               let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+               clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
+               let arrayPointer = GetArrayPointer(localID);
+               document.getElementById("inputText").innerHTML = "The shoe you clicked on was:  " + clientShoeArray[arrayPointer].shoeName;
+               // document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
+               // document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
+               // document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
+               // document.getElementById("oneURL").innerHTML = "URL: " + clientShoeArray[arrayPointer].url;
               
 
-            // });
+            });
+            document.getElementById("deleteShoe").addEventListener("click", function () {
+               let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
+               clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
+               let arrayPointer = GetArrayPointer(localID);
+               //let which = document.getElementById("deleteItem").value;
+               let which = clientShoeArray[arrayPointer].shoeName;
+               console.log(which);
+               $.ajax({
+                   type: "DELETE",
+                   url: "/DeleteShoe/" +which,
+                   success: function(result){
+                       alert(result);
+                   },
+                   error: function (xhr, textStatus, errorThrown) {  
+                       alert("error from main.js ")
+                   }  
+               });
+               document.location.href = "index.html#list";
+               createList();
+               
+       
+            });
 
 
 });
@@ -95,7 +135,6 @@ function createList() {
    // clear prior data
    //go get data
    $.get("/getAllShoes", function(data, status){  // AJAX get
-            console.log(clientShoeArray);
          clientShoeArray = data;  // put the returned server json data into our local  array
          
          var divMovieList = document.getElementById("divMovieList");
@@ -122,8 +161,7 @@ function createList() {
          var liArray = document.getElementsByClassName("oneMovie");
          Array.from(liArray).forEach(function (element) {
             element.addEventListener('click', function () {
-              
-
+            
               
                // get that data-parm we added for THIS particular li as we loop thru them
                var parm = this.getAttribute("data-parm");  // passing in the record.Id
@@ -133,9 +171,52 @@ function createList() {
                localStorage.setItem('clientShoeArray', stringShoeArray);
                let arrayPointer = GetArrayPointer(parm);
                window.open(clientShoeArray[arrayPointer].url);
-               
+      });
+   });
+});
+};
 
+function deleteList() {
+   // clear prior data
+   //go get data
+   $.get("/getAllShoes", function(data, status){  // AJAX get
+         clientShoeArray = data;  // put the returned server json data into our local  array
+         
+         var deleteMovieList = document.getElementById("deleteMovieList");
+         while (deleteMovieList.firstChild) {    // remove any old data so don't get duplicates
+         deleteMovieList.removeChild(deleteMovieList.firstChild);
+         };
+      
+         var ul = document.createElement('ul');
         
+         //creating li's, giving them ID's via setAttribute
+         clientShoeArray.forEach(function (element) {   
+            var li = document.createElement('li');
+            li.classList.add('oneMovie'); 
+            li.setAttribute("data-parm", element.ID);
+            li.innerHTML = "Name: " + element.shoeName + " | Year:  " + element.year + " | Price: " + element.price;
+            ul.appendChild(li);
+         });
+
+         
+         deleteMovieList.appendChild(ul);
+
+         //this is creating active li's.
+        
+         var liArray = document.getElementsByClassName("oneMovie");
+         Array.from(liArray).forEach(function (element) {
+            element.addEventListener('click', function () {
+              
+               // get that data-parm we added for THIS particular li as we loop thru them
+               var parm = this.getAttribute("data-parm");  // passing in the record.Id
+               // get our encoded value and save THIS ID value in the localStorage "dictionairy"
+               localStorage.setItem('parm', parm);
+               let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
+               localStorage.setItem('clientShoeArray', stringShoeArray);
+               document.location.href = "index.html#details";
+              // let arrayPointer = GetArrayPointer(parm);
+            //window.open(clientShoeArray[arrayPointer].url);
+
       });
    });
 });
@@ -184,6 +265,9 @@ function createSortList() {
       });
    });
 };
+
+
+
 
 function GetArrayPointer(localID) {
    for (let i = 0; i < clientShoeArray.length; i++) {
