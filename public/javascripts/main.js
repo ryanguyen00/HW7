@@ -96,18 +96,20 @@ document.addEventListener("DOMContentLoaded", function () {
                let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
                clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
                let arrayPointer = GetArrayPointer(localID);
-               document.getElementById("inputText").innerHTML = "The shoe you clicked on was:  " + clientShoeArray[arrayPointer].shoeName;
+               document.getElementById("inputText").innerHTML = "The shoe you clicked on was: " + clientShoeArray[arrayPointer].shoeName;
                // document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
                // document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
                // document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
                // document.getElementById("oneURL").innerHTML = "URL: " + clientShoeArray[arrayPointer].url;
-              
+               
+               
 
             });
             document.getElementById("deleteShoe").addEventListener("click", function () {
                let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
                clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
                let arrayPointer = GetArrayPointer(localID);
+               console.log("from button: " + arrayPointer + " " + clientShoeArray[arrayPointer].shoeName);
                //let which = document.getElementById("deleteItem").value;
                let which = clientShoeArray[arrayPointer].shoeName;
                console.log(which);
