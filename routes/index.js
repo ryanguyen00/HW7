@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 /* GET home page.  Server Page */
-let serverShoeArray = [];
+serverShoeArray = [];
 
 let shoeObject = function (aShoeName, aYear, aPrice, aURL ) {
    this.ID = Math.random().toString(16).slice(5)
@@ -38,7 +38,7 @@ fileManager  = {
   write: function() {
   let data = JSON.stringify(serverShoeArray);    // take our object data and make it writeable
   fs.writeFileSync('shoesData.json', data);  // write it
-  }
+  },
 }
 
 

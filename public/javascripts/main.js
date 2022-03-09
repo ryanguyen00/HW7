@@ -56,12 +56,12 @@ document.addEventListener("DOMContentLoaded", function () {
             //load list before click
             $(document).on("pagebeforeshow", "#list", function (event) {   // have to use jQuery 
                createList();
-               console.log(clientShoeArray);
+             
             });
             //load list before click
             $(document).on("pagebeforeshow", "#delete", function (event) {   // have to use jQuery 
                deleteList();
-               console.log(clientShoeArray);
+             
             });
 
             //sort by Price
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   return a.price - b.price;
                });
                createSortList();   
-              alert( "New List Updated by Price!")
+               alert( "New List Updated by Price!")
             });
 
             //sort by Title
@@ -97,20 +97,15 @@ document.addEventListener("DOMContentLoaded", function () {
                clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
                let arrayPointer = GetArrayPointer(localID);
                document.getElementById("inputText").innerHTML = "The shoe you clicked on was: " + clientShoeArray[arrayPointer].shoeName;
-               // document.getElementById("oneShoeName").innerHTML = "The shoe name is: " + clientShoeArray[arrayPointer].shoeName;
-               // document.getElementById("oneYear").innerHTML = "Year released: " + clientShoeArray[arrayPointer].year;
-               // document.getElementById("onePrice").innerHTML = "Price: " + clientShoeArray[arrayPointer].price;
-               // document.getElementById("oneURL").innerHTML = "URL: " + clientShoeArray[arrayPointer].url;
-               
-               
-
+   
             });
+
+            //delete shoe
             document.getElementById("deleteShoe").addEventListener("click", function () {
                let localID = localStorage.getItem('parm');  // get the unique key back from the dictionairy
                clientShoeArray = JSON.parse(localStorage.getItem('clientShoeArray'));  
                let arrayPointer = GetArrayPointer(localID);
                console.log("from button: " + arrayPointer + " " + clientShoeArray[arrayPointer].shoeName);
-               //let which = document.getElementById("deleteItem").value;
                let which = clientShoeArray[arrayPointer].shoeName;
                console.log(which);
                $.ajax({
@@ -171,13 +166,14 @@ function createList() {
                localStorage.setItem('parm', parm);
                let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
                localStorage.setItem('clientShoeArray', stringShoeArray);
-               let arrayPointer = GetArrayPointer(parm);
-               window.open(clientShoeArray[arrayPointer].url);
+                let arrayPointer = GetArrayPointer(parm);
+                window.open(clientShoeArray[arrayPointer].url);
       });
    });
 });
 };
 
+//Difference from createList is that we just want active li's to go to #details page, not open tab to URL
 function deleteList() {
    // clear prior data
    //go get data
@@ -216,9 +212,6 @@ function deleteList() {
                let stringShoeArray = JSON.stringify(clientShoeArray); // convert array to "string"
                localStorage.setItem('clientShoeArray', stringShoeArray);
                document.location.href = "index.html#details";
-              // let arrayPointer = GetArrayPointer(parm);
-            //window.open(clientShoeArray[arrayPointer].url);
-
       });
    });
 });
@@ -227,15 +220,10 @@ function deleteList() {
 //and not be the new array I want by sorting.
 function createSortList() {
   
-   // $.get("/getAllShoes", function(data, status){  // AJAX get
-     
-   //       clientShoeArray = data;  // put the returned server json data into our local  array
-         
          var divMovieList = document.getElementById("divMovieList");
          while (divMovieList.firstChild) {    // remove any old data so don't get duplicates
              divMovieList.removeChild(divMovieList.firstChild);
          };
-      
          var ul = document.createElement('ul');
         
          //creating li's, giving them ID's via setAttribute
@@ -278,7 +266,6 @@ function GetArrayPointer(localID) {
        }
    }
 }
-
 
 
 function yearSort(a,b) {
